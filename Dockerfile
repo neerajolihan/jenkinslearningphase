@@ -1,24 +1,22 @@
-# Use the official Ubuntu 20.04 image as base
+# Base image
 FROM ubuntu:20.04
 
-# Update apt packages and install Python 3 and Ansible
+# Prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install Python & Ansible
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
         python3 \
         python3-pip \
         ansible \
-        && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
-# Set Python 3 as the default python
+# Symlink python → python3
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# Confirm Ansible installation
-RUN ansible --version
-
-# Set working directory
+# Working directory
 WORKDIR /ansible
 
-# By default, run bash
+# Default command
 CMD ["/bin/bash"]
